@@ -1,0 +1,18 @@
+module ROM (adr,out);
+	input [7:0] adr;
+	output reg[31:0] out;
+	
+	always @(adr) begin
+	case (adr)
+		8'h00: out = 32'b0; 
+		8'h04: out = 32'h00f00193; //addi x3, x0, 15
+		8'h08: out = 32'h00700213; //addi x4, x0, 7
+		8'h0c: out = 32'h004182b3; //add  x5, x3, x4
+		8'h10: out = 32'h06502223; //sw   x5, 100(x0)
+		8'h14: out = 32'h05d22183; //lw   x3, 93(x4)
+		8'h18: out = 32'h00518063; //beq  x3,x5,0;
+		
+	endcase
+	end
+	
+endmodule
