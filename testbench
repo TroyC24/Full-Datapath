@@ -1,0 +1,72 @@
+module testbench ();
+	reg clk1,clk2,clk3,reset,RW,ALUsrc,PCsrc,MRW,MTR,sub;
+	reg [2:0] ALUop;
+	reg [1:0] IMMs;
+	wire [31:0] x3,x4,x5,x0,instr,C;
+	wire [7:0] count;
+	wire [4:0] RD,RS1,RS2;
+	wire Cout,Z,N,M;
+	
+	toplevel dut (clk1,clk2,clk3,reset,IMMs,RW,ALUsrc,PCsrc,MRW,MTR,ALUop,sub,Cout,Z,N,M,
+	x0,x3,x4,x5,instr,count,RD,RS1,RS2,C);
+	
+	initial
+		clk1 = 1'b1;
+	always begin
+		#3 clk1 = 1'b0;
+		#3 clk1 = 1'b1;
+	end
+	
+	always @(clk1) begin
+		#1 clk2 = clk1;
+		#1 clk3 = clk1;
+	end
+	
+	initial begin
+		reset = 1'b1;
+		sub = 1'b0;
+		#6 reset = 1'b0;
+		//addi
+		IMMs = 2'b00;
+		RW = 1'b1;
+		ALUsrc = 1'b1;
+		ALUop = 3'b000;
+		MRW = 1'b0;
+		MTR = 1'b1;
+		PCsrc = 1'b0;
+		#12;
+		//add
+		ALUsrc = 1'b0;
+		#6
+		//store
+		IMMs = 2'b01;
+		RW = 1'b0;
+		ALUsrc = 1'b1;
+		ALUop = 3'b000;
+		MRW = 1'b1;
+		MTR = 1'b0;
+		PCsrc = 1'b0;
+		#6
+		//load
+		IMMs = 2'b00;
+		ALUsrc = 1'b1;
+		ALUop = 3'b000;
+		MRW = 1'b0;
+		MTR = 1'b0;
+		PCsrc = 1'b0;
+		RW = 1'b1;
+		#6;
+		//branch
+		IMMs = 2'b10;
+		ALUsrc = 1'b0;
+		ALUop=3'b000;
+		sub = 1'b1;
+		MRW = 1'b0;
+		MTR = 1'b1;
+		PCsrc = 1'b1;
+	end
+	
+	initial begin
+		#1000 $stop;
+	end
+endmodule
