@@ -1,0 +1,8 @@
+module Idecoder (I,RD,RS1,RS2);
+	input [31:0] I;
+	output [4:0] RD,RS1,RS2;
+	
+	assign RD = I[11:7];
+	assign RS1 = I[19:15];
+	assign RS2 = I[24:20];
+endmodule
