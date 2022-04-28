@@ -25,7 +25,6 @@ module testbench ();
 	initial begin
 		reset = 1'b1;
 		sub = 1'b0;
-		#6 reset = 1'b0;
 		//addi
 		IMMs = 2'b00;
 		RW = 1'b1;
@@ -34,6 +33,7 @@ module testbench ();
 		MRW = 1'b0;
 		MTR = 1'b1;
 		PCsrc = 1'b0;
+		#6 reset = 1'b0;
 		#12;
 		//add
 		ALUsrc = 1'b0;
