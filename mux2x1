@@ -1,0 +1,13 @@
+module mux2x1 (A,B,S,C);
+	input [31:0] A,B;
+	input S;
+	output reg[31:0] C;
+	
+	always @(A,B,S) begin
+	case (S)
+		1'b0: C <= A;
+		1'b1: C <= B;
+		endcase
+	end
+	
+endmodule
