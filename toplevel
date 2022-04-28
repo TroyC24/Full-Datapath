@@ -1,0 +1,33 @@
+module toplevel (clk1,clk2,clk3,reset,IMMs,RW,ALUsrc,PCsrc,MRW,MTR,ALUop,sub,Cout,Z,N,M,x0,x3,x4,x5,instr,count,RD,RS1,RS2,C);
+	input clk1,clk2,clk3,reset;
+	input RW,ALUsrc,PCsrc,MRW,MTR,sub;
+	input [1:0] IMMs;
+	input [2:0] ALUop;
+	output [31:0] x3,x4,x5,x0,instr,C;
+	output [7:0] count;
+	output Cout,Z,N,M;
+	
+	wire [7:0] PC,PCnext;
+	PC inst0 (PCnext,PC,clk1,reset);
+	assign count = PC;
+	
+	wire [31:0] I;
+	ROM inst2 (PC,I);
+	assign instr = I;
+	
+	output [4:0] RD,RS1,RS2;
+	Idecoder inst3 (I,RD,RS1,RS2);
+	
+	wire [31:0] A,B,B1,B2,C1,C2;
+	registerFile inst4(A,B1,C,RS1,RS2,RD,clk3,reset,RW,x0,x3,x4,x5);
+	IMMgen inst5(I,B2,IMMs);
+	
+	mux2x1 toALU(B1,B2,ALUsrc,B);
+	
+	ALU inst6(A,B,1'b0,ALUop,sub,C1,Cout,Z,N,M);
+	ram256x32 inst7(B1,C2,C1,MRW,clk2);
+	
+	mux2x1 toReg(C2,C1,MTR,C);
+	mux2x1 toPC(PC+3'b100,PC+B2,PCsrc,PCnext);
+	
+endmodule
